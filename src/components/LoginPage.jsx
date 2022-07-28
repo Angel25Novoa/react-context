@@ -15,14 +15,18 @@ export const LoginPage = () => {
 
   const { user, setUser } = useContext( UserContext );
 
-  const url = 'http://localhost:3001/api/v1/auth/login';
+  const url = import.meta.env.VITE_LOGIN_URL
+  const url2 = import.meta.env.VITE_LOGIN_URL_WITH_TOKEN
 
   const onSubmit = (data) => {
-    console.log(data);
     axios.post(url, data)
       .then(res => {
-        console.log(res.data)
-        setUser(res.data);
+        return( axios.get(url2, {headers:{
+          Authorization: `Bearer ${res.data.token}`
+        }}))
+        .then(res => {
+          setUser(res.data);
+        })
       })
   }
   
