@@ -1,11 +1,11 @@
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { UserContext } from '../context/UserContext';
 import { useForm } from 'react-hook-form';
 
 export const LoginPage = () => {
-
-  console.log(import.meta.env.VITE_SOME_KEY)
+  let navigate = useNavigate();
 
   const {
     register,
@@ -13,7 +13,7 @@ export const LoginPage = () => {
     formState: { errors },
   } = useForm();
 
-  const { user, setUser } = useContext( UserContext );
+  const { setUser } = useContext( UserContext );
 
   const url = import.meta.env.VITE_LOGIN_URL
   const url2 = import.meta.env.VITE_LOGIN_URL_WITH_TOKEN
@@ -25,7 +25,8 @@ export const LoginPage = () => {
           Authorization: `Bearer ${res.data.token}`
         }}))
         .then(res => {
-          setUser(res.data);
+          setUser(res.data)
+            navigate('/profile', { replace: true })
         })
       })
   }
